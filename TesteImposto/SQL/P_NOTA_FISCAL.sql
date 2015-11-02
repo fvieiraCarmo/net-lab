@@ -40,6 +40,7 @@ BEGIN
            ,@pEstadoOrigem)
 
 		SET @pId = @@IDENTITY
+		RETURN @pID
 	END
 	ELSE
 	BEGIN

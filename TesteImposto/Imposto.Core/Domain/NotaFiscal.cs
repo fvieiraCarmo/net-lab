@@ -17,7 +17,7 @@ namespace Imposto.Core.Domain
         public string EstadoDestino { get; set; }
         public string EstadoOrigem { get; set; }
 
-        public IEnumerable<NotaFiscalItem> ItensDaNotaFiscal { get; set; }
+        public List<NotaFiscalItem> ItensDaNotaFiscal { get; set; }
 
         public NotaFiscal()
         {
@@ -26,133 +26,81 @@ namespace Imposto.Core.Domain
 
         public void EmitirNotaFiscal(Pedido pedido)
         {
-            this.NumeroNotaFiscal = 99999;
+            //Dados básicos da NF
+            this.NumeroNotaFiscal = new Random().Next(Int32.MaxValue);
             this.Serie = new Random().Next(Int32.MaxValue);
             this.NomeCliente = pedido.NomeCliente;
+            this.EstadoDestino = pedido.EstadoDestino;
+            this.EstadoOrigem = pedido.EstadoOrigem;
 
-            this.EstadoDestino = pedido.EstadoOrigem;
-            this.EstadoOrigem = pedido.EstadoDestino;
-
+            //Produtos da NF
             foreach (PedidoItem itemPedido in pedido.ItensDoPedido)
             {
-                NotaFiscalItem notaFiscalItem = new NotaFiscalItem();
-                if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "RJ"))
-                {
-                    notaFiscalItem.Cfop = "6.000";                    
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "PE"))
-                {
-                    notaFiscalItem.Cfop = "6.001";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "MG"))
-                {
-                    notaFiscalItem.Cfop = "6.002";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "PB"))
-                {
-                    notaFiscalItem.Cfop = "6.003";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "PR"))
-                {
-                    notaFiscalItem.Cfop = "6.004";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "PI"))
-                {
-                    notaFiscalItem.Cfop = "6.005";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "RO"))
-                {
-                    notaFiscalItem.Cfop = "6.006";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "SE"))
-                {
-                    notaFiscalItem.Cfop = "6.007";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "TO"))
-                {
-                    notaFiscalItem.Cfop = "6.008";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "SE"))
-                {
-                    notaFiscalItem.Cfop = "6.009";
-                }
-                else if ((this.EstadoOrigem == "SP") && (this.EstadoDestino == "PA"))
-                {
-                    notaFiscalItem.Cfop = "6.010";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "RJ"))
-                {
-                    notaFiscalItem.Cfop = "6.000";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "PE"))
-                {
-                    notaFiscalItem.Cfop = "6.001";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "MG"))
-                {
-                    notaFiscalItem.Cfop = "6.002";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "PB"))
-                {
-                    notaFiscalItem.Cfop = "6.003";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "PR"))
-                {
-                    notaFiscalItem.Cfop = "6.004";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "PI"))
-                {
-                    notaFiscalItem.Cfop = "6.005";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "RO"))
-                {
-                    notaFiscalItem.Cfop = "6.006";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "SE"))
-                {
-                    notaFiscalItem.Cfop = "6.007";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "TO"))
-                {
-                    notaFiscalItem.Cfop = "6.008";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "SE"))
-                {
-                    notaFiscalItem.Cfop = "6.009";
-                }
-                else if ((this.EstadoOrigem == "MG") && (this.EstadoDestino == "PA"))
-                {
-                    notaFiscalItem.Cfop = "6.010";
-                }
-                if (this.EstadoDestino == this.EstadoOrigem)
-                {
-                    notaFiscalItem.TipoIcms = "60";
-                    notaFiscalItem.AliquotaIcms = 0.18;
-                }
-                else
-                {
-                    notaFiscalItem.TipoIcms = "10";
-                    notaFiscalItem.AliquotaIcms = 0.17;
-                }
-                if (notaFiscalItem.Cfop == "6.009")
-                {
-                    notaFiscalItem.BaseIcms = itemPedido.ValorItemPedido*0.90; //redução de base
-                }
-                else
-                {
-                    notaFiscalItem.BaseIcms = itemPedido.ValorItemPedido;
-                }
-                notaFiscalItem.ValorIcms = notaFiscalItem.BaseIcms*notaFiscalItem.AliquotaIcms;
+                NotaFiscalItem notaFiscalItem = GerarItemNotaFiscal(itemPedido);
+                this.ItensDaNotaFiscal.Add(notaFiscalItem);
+            }    
+        }
 
-                if (itemPedido.Brinde)
-                {
-                    notaFiscalItem.TipoIcms = "60";
-                    notaFiscalItem.AliquotaIcms = 0.18;
-                    notaFiscalItem.ValorIcms = notaFiscalItem.BaseIcms * notaFiscalItem.AliquotaIcms;
-                }
-                notaFiscalItem.NomeProduto = itemPedido.NomeProduto;
-                notaFiscalItem.CodigoProduto = itemPedido.CodigoProduto;
-            }            
+
+        public NotaFiscalItem GerarItemNotaFiscal(PedidoItem itemPedido)
+        {
+            NotaFiscalItem notaFiscalItem = new NotaFiscalItem();
+
+            notaFiscalItem.NomeProduto = itemPedido.NomeProduto;
+            notaFiscalItem.CodigoProduto = itemPedido.CodigoProduto;
+            //Desconto
+            notaFiscalItem.TaxaDesconto = ObterTaxaDesconto();
+            double vlDesconto = itemPedido.ValorItemPedido * (notaFiscalItem.TaxaDesconto / 100.0D);
+
+            itemPedido.ValorItemPedido = itemPedido.ValorItemPedido - vlDesconto;
+
+            //Cfop
+            notaFiscalItem.Cfop = new Cfop().ObterCfopPorRota(this.EstadoOrigem, this.EstadoDestino);
+            //Icms
+            CalcularIcms(notaFiscalItem, itemPedido.ValorItemPedido);
+            //Ipi
+            CalcularIpi(notaFiscalItem, itemPedido.ValorItemPedido);
+            //Brinde
+            if (itemPedido.Brinde)
+            {
+                notaFiscalItem.TipoIcms = "60";
+                notaFiscalItem.AliquotaIcms = 0.18;
+                notaFiscalItem.ValorIcms = notaFiscalItem.BaseIcms * notaFiscalItem.AliquotaIcms;
+                notaFiscalItem.AliquotaIpi = 0;
+                notaFiscalItem.ValorIpi = 0;
+            }
+
+            return notaFiscalItem;
+        }
+        
+        public double ObterTaxaDesconto()
+        {
+            double taxaDesconto = 0;
+            //Taxa de desconto de 10% para região Sudeste
+            if (this.EstadoDestino == "SP" || this.EstadoDestino == "RJ" || this.EstadoDestino == "MG" || this.EstadoDestino == "ES")
+            {
+                taxaDesconto = 10;
+            }
+            return taxaDesconto;
+        }
+
+        public void CalcularIcms(NotaFiscalItem nfItem, double valorItemPedido)
+        {
+            Icms icms = new Icms();
+            icms.CalcularIcms(valorItemPedido, this.EstadoOrigem, this.EstadoDestino, nfItem.Cfop);
+            nfItem.BaseIcms = icms.BaseIcms;
+            nfItem.AliquotaIcms = icms.AliquotaIcms;
+            nfItem.ValorIcms = icms.ValorIcms;
+            nfItem.TipoIcms = icms.TipoIcms;
+        }
+
+        public void CalcularIpi(NotaFiscalItem nfItem, double valorItemPedido)
+        {
+            Ipi ipi = new Ipi();
+            ipi.CalcularIpi(valorItemPedido);
+            nfItem.BaseIpi = ipi.BaseIpi;
+            nfItem.AliquotaIpi = ipi.AliquotaIpi;
+            nfItem.ValorIpi = ipi.ValorIpi;
         }
     }
 }

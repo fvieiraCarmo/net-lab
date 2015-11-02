@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteImposto", "TesteImpost
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imposto.Core", "Imposto.Core\Imposto.Core.csproj", "{2339C0B3-1E95-4CD3-BFBA-64B377857016}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteUnitario", "TesteUnitario\TesteUnitario.csproj", "{4C8DF2CA-A4CA-44C3-BE1F-6D5B8A33226D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2339C0B3-1E95-4CD3-BFBA-64B377857016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2339C0B3-1E95-4CD3-BFBA-64B377857016}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2339C0B3-1E95-4CD3-BFBA-64B377857016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C8DF2CA-A4CA-44C3-BE1F-6D5B8A33226D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C8DF2CA-A4CA-44C3-BE1F-6D5B8A33226D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C8DF2CA-A4CA-44C3-BE1F-6D5B8A33226D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C8DF2CA-A4CA-44C3-BE1F-6D5B8A33226D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
